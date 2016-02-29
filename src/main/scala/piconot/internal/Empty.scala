@@ -1,4 +1,4 @@
-package piconot
+package piconot.internal
 
 object EmptyBot extends Picobor("resources" / "empty.txt") {
   

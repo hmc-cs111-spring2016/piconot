@@ -1,4 +1,4 @@
-package piconot
+package piconot.internal
 
 import scala.language.implicitConversions
 import picolib.maze.Maze
