@@ -13,6 +13,8 @@ import scalafx.application.JFXApp
  * give a sample solution that wasn't too innovative on syntax design and that
  * contained a couple of implementation techniques that you might not have 
  * thought of at first.
+ * 
+ * No, the name "Picobor" is not a typo -- this is a boring language :).
  */
 
 class Picobor(val mazeFilename: String) extends JFXApp {
