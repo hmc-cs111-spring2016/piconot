@@ -2,45 +2,28 @@ package piconot.internal
 
 import scala.language.postfixOps
 
+// A Picobot program that can fill an empty room
 object EmptyBot extends Picobor("resources" / "empty.txt") {
   
-  /////////////////////////////////////////////////////////
-  // State 0: go West
-  /////////////////////////////////////////////////////////
+  // States 0 and 1: move to the top left
 
-  // as long as West is unblocked, go West
-  (0 `**x*`) → W (0)
+  // State 0: move left
+  (0 `**x*`) → W (0)   // go all the way to the left
+  (0 `**W*`) → X (1)   // can't go left anymore, so try to go up
 
-  // can't go West anymore, so try to go North (by transitioning to State 1)
-  (0 `**W*`) → X (1)
+  // State 1: move up
+  (1 `x***`) → N (1)  // go all the way to the top
+  (1 `N**x`) → S (2)  // can't go up any more, so try to go down
 
-  /////////////////////////////////////////////////////////
-  // State 1: go North
-  /////////////////////////////////////////////////////////
+  // States 2 and 3: fill from top to bottom, left to right
 
-  // as long as North is unblocked, go North
-  (1 `x***`) → N (1)
-  
-  // can't go North any more, so try to go South (by transitioning to State 2)
-  (1 `N**x`) → S (2)
-  
-  /////////////////////////////////////////////////////////
-  // States 2 & 3: fill from North to South, West to East
-  /////////////////////////////////////////////////////////
+  // State 2: fill this column to the bottom
+  (2 `***x`) → S (2)  // go all the way to the bottom
+  (2 `*x*S`) → E (3)  // can't go down anymore, so try to go right
 
-  // State 2: fill this column from North to South  
-  (2 `***x`) → S (2)
-  
-  // can't go South anymore, move one column to the East and go North
-  // (by transitioning to State 3)
-  (2 `*x*S`) → E (3)
-  
-  // State 3: fill this column from South to North
-  (3 `x***`) → N (3)
-  
-  // can't go North anymore, move one column to the East and go South
-  // (by transitioning to State 2)
-  (3 `Nx**`) → E (2)  
+  // State 3: fill this column to the top
+  (3 `x***`) → N (3)  // go all the way to the top
+  (3 `Nx**`) → E (2)  // can't go up anymore, so try to go right
   
   run
 } 
