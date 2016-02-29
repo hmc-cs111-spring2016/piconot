@@ -22,6 +22,9 @@ import picolib.semantics._
 
 object PiconotParser extends RegexParsers {
 
+  // for parsing comments
+  override protected val whiteSpace = """(\s|#.*)+""".r
+  
   // parsing interface
   def apply(s: String): ParseResult[List[Rule]] = parseAll(program, s)
     
