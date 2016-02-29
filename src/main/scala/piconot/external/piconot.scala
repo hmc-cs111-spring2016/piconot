@@ -3,9 +3,14 @@ package piconot.external
 import picolib.maze.Maze
 import picolib.semantics._
 import java.io.FileNotFoundException
-import scalafx.application.JFXApp
 import piconot.external.parser.PiconotParser
-import piconot.external.semantics.checks._
+import piconot.external.semantics.UndefinedStates
+import piconot.external.semantics.BoxedIn
+import piconot.external.semantics.DefaultChecker
+import piconot.external.semantics.UreachableStates
+import piconot.external.semantics.MoveToWall
+import scalafx.application.JFXApp
+
 
 object Piconot extends JFXApp {
 
@@ -34,6 +39,7 @@ object Piconot extends JFXApp {
       case PiconotParser.Success(t, _) ⇒ {
         val bot = new Picobot(maze, program.get) with TextDisplay with GUIDisplay
         checkErrors(bot)        
+        bot.run
       }
     }
 

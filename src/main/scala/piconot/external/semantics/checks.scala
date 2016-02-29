@@ -1,4 +1,4 @@
-package piconot.external.semantics.checks
+package piconot.external.semantics
 
 /**
  * This file adds semantic checks to Piconot, including:
