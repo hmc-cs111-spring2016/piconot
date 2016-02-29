@@ -26,16 +26,16 @@ also good to have a chance to experience how to implement a language the right
 way, so you'll also implement your syntax as an external DSL.)
 
 ## Checklist
-  - [ ] [Sign up for teams][Teams]. You'll work in pairs for this assignment
+  - [X] [Sign up for teams][Teams]. You'll work in pairs for this assignment
   - [ ] Design a new syntax for Picobot 
      - [ ] Describe your design in `design.md`
      - [ ] Before you implement the syntax, write the "empty room" program in
      `example-ideal.txt`
   - [ ] Implement your new syntax as an internal DSL
-     - [ ] Add files, as needed, to implement your syntax
+     - [X] Add files, as needed, to implement your syntax
      - Include two example programs
-       - [ ] `src/main/scala/piconot/internal/Empty.scala`
-       - [ ] `src/main/scala/piconot/internal/RightHand.scala`
+       - [X] `src/main/scala/piconot/internal/Empty.scala`
+       - [X] `src/main/scala/piconot/internal/RightHand.scala`
      - [ ] Describe your implementation process in `evaluation.md`
   - [ ] Implement your new syntax as an external DSL, using parser combinators
      - Include at least two example programs
