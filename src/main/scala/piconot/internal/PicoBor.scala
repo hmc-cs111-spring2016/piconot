@@ -17,8 +17,6 @@ import scalafx.application.JFXApp
 
 class Picobor(val mazeFilename: String) extends JFXApp {
   
-  import scala.language.postfixOps
-
   // the list of rules, which is built up as the Picobor program executes
   private val rules = MutableList.empty[Rule]  
   

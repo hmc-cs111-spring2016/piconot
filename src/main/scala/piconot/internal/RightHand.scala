@@ -1,5 +1,7 @@
 package piconot.internal
 
+import scala.language.postfixOps
+
 object RightHand extends Picobor("resources" / "maze.txt") {
   
   // A picobot program that can solve a maze, using the right-hand rule

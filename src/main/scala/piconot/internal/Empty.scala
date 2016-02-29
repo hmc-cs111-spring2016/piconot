@@ -1,5 +1,7 @@
 package piconot.internal
 
+import scala.language.postfixOps
+
 object EmptyBot extends Picobor("resources" / "empty.txt") {
   
   /////////////////////////////////////////////////////////
