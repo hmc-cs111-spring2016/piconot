@@ -208,7 +208,7 @@ external DSL and how to run it on a piconot program. A somewhat easy way to do
 is the following:
 
 ```
-sbt run "path-to-maze-file path-to-bot-file"
+sbt "run-main piconot.external.Piconot resources/empty.txt src/main/scala/piconot/external/Empty.bot"
 ```
 
 Note that for your users to run your language this way, you'll have to design
