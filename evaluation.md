@@ -1,9 +1,12 @@
 # Evaluation: running commentary
 
 ## Internal DSL
-
 _Describe each change from your ideal syntax to the syntax you implemented, and
 describe_ why _you made the change._
+
+First we had to change the direction North, East, West, South to the more intuitive Up, Right, Left,
+Down. 
+
 
 **On a scale of 1–10 (where 10 is "a lot"), how much did you have to change your syntax?**
 
