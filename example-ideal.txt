@@ -1,0 +1,7 @@
+go left until blocked on left then
+go up until blocked on up and left then
+(search) go down until blocked on down and left then
+go right then
+go up until blocked on up then
+go right then
+go to search  
