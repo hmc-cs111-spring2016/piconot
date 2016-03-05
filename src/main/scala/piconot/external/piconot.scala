@@ -1,14 +1,10 @@
 package piconot.external
 
+import java.io.FileNotFoundException
 import picolib.maze.Maze
 import picolib.semantics._
-import java.io.FileNotFoundException
 import piconot.external.parser.PiconotParser
-import piconot.external.semantics.UndefinedStates
-import piconot.external.semantics.BoxedIn
-import piconot.external.semantics.DefaultChecker
-import piconot.external.semantics.UreachableStates
-import piconot.external.semantics.MoveToWall
+import piconot.external.semantics._
 import scalafx.application.JFXApp
 
 
