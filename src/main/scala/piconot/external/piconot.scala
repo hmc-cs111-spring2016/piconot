@@ -44,7 +44,7 @@ object Piconot extends JFXApp {
     }
 
   /** A string that describes how to use the program **/
-  def usage = "usage: vanillabot.VanillaBot <maze-file> <rules-file>"
+  def usage = "usage: piconot.external.Piconot <maze-file> <rules-file>"
 
   /**
    * Given a filename, get a list of the lines in the file
