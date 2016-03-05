@@ -1,0 +1,41 @@
+## EMPTY ROOM PROBLEM
+
+0 x*** -> N 0   
+0 N*x* -> W 0 
+0 NxWx -> S 1
+
+1 ***x -> S 1   
+1 ***S -> E 2
+
+2 x*** -> N 2
+2 N*** -> E 1  
+
+
+# Empty Room Problem in our syntax:
+
+def zero:
+    while ~N move N
+    while ~NW move W
+    if NW~E~S 
+        move S
+        one
+
+def one:
+    while ~S move S
+    if S
+        move E
+        two
+
+def two:
+    while ~N move N
+    if N
+        move E
+        one
+
+
+Outline of the new syntax:
+
+def (funcName, body)
+while(currCondition, [action])
+if(currCondition, [action], newState)
+
