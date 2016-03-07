@@ -1,0 +1,18 @@
+def zero:
+    while ~N move N
+    while ~NW move W
+    if NW~E~S 
+        move S
+        one
+
+def one:
+    while ~S move S
+    if S
+        move E
+        two
+
+def two:
+    while ~N move N
+    if N
+        move E
+        one

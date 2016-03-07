@@ -11,6 +11,8 @@ import picolib.semantics._
  *  the picolib library that you might need to implement your language
  */
 
+
+
 object EmptyRoom extends JFXApp {
   val emptyMaze = Maze("resources" + File.separator + "empty.txt")
 
@@ -23,7 +25,7 @@ object EmptyRoom extends JFXApp {
     // as long as West is unblocked, go West
     Rule( 
       State("0"), 
-      Surroundings(Anything, Anything, Open, Anything), 
+      Surroundings(Anything, Anything, Open, Anything),
       West, 
       State("0")
     ),  
