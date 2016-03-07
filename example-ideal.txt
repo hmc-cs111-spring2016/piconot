@@ -5,3 +5,7 @@ go right then
 go up until blocked on up then
 go right then
 go to search  
+
+Also legal in the language would be:
+go left until blocked on left and down and open on up then
+...
