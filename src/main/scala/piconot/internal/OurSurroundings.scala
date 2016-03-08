@@ -6,19 +6,51 @@ import scalafx.application.JFXApp
 import picolib.maze.Maze
 import picolib.semantics._
 
-abstract class OurSurroundings {
-    def N(surr: OurSurroundings = noSurroundings) = North(surr)
-    def W(surr: OurSurroundings = noSurroundings) = West(surr)
-    def S(surr: OurSurroundings = noSurroundings) = South(surr)
-    def E(surr: OurSurroundings = noSurroundings) = East(surr)
-    def ~(surr: OurSurroundings) = Not(surr)
+class OurSurroundings(newSurr: Surroundings) {
+    var picoSurr =  newSurr
+    def N(surr: OurSurroundings) = {
+      this.picoSurr = Surroundings(Blocked, picoSurr.east, picoSurr.west, picoSurr.south)
+      this
+    }
+    def E(surr: OurSurroundings) = {
+      this.picoSurr = Surroundings(picoSurr.north, Blocked, picoSurr.west, picoSurr.south)
+      this
+    }
+    def W(surr: OurSurroundings) = {
+      this.picoSurr = Surroundings(picoSurr.north, picoSurr.east, Blocked, picoSurr.south)
+      this
+    }
+    def S(surr: OurSurroundings) = {
+      this.picoSurr = Surroundings(picoSurr.north, picoSurr.east, picoSurr.west, Blocked)
+      this
+    }
+    def notN(surr: OurSurroundings) = {
+      this.picoSurr = Surroundings(Open, picoSurr.east, picoSurr.west, picoSurr.south)
+      this
+    }
+    def notE(surr: OurSurroundings) = {
+      this.picoSurr = Surroundings(picoSurr.north, Open, picoSurr.west, picoSurr.south)
+      this
+    }
+    def notW(surr: OurSurroundings) = {
+      this.picoSurr = Surroundings(picoSurr.north, picoSurr.east, Open, picoSurr.south)
+      this
+    }
+    def notS(surr: OurSurroundings) = {
+      this.picoSurr = Surroundings(picoSurr.north, picoSurr.east, picoSurr.west, Open)
+      this
+    }
 }
 
+object OurSurroundings {
+    def * = new OurSurroundings(Surroundings(Anything, Anything, Anything, Anything))
+    def N(surr: OurSurroundings) = new OurSurroundings(Surroundings(Blocked, Anything, Anything, Anything))
+    def E(surr: OurSurroundings) = new OurSurroundings(Surroundings(Anything, Blocked, Anything, Anything))
+    def W(surr: OurSurroundings) = new OurSurroundings(Surroundings(Anything, Anything, Blocked, Anything))
+    def S(surr: OurSurroundings) = new OurSurroundings(Surroundings(Anything, Anything, Anything, Blocked))
+    def notN(surr: OurSurroundings) = new OurSurroundings(Surroundings(Open, Anything, Anything, Anything))
+    def notE(surr: OurSurroundings) = new OurSurroundings(Surroundings(Anything, Open, Anything, Anything))
+    def notW(surr: OurSurroundings) = new OurSurroundings(Surroundings(Anything, Anything, Open, Anything))
+    def notS(surr: OurSurroundings) = new OurSurroundings(Surroundings(Anything, Anything, Anything, Open))
+}
 
-case class North(val surr: OurSurroundings ) extends OurSurroundings
-case class West(val surr: OurSurroundings ) extends OurSurroundings
-case class South(val surr: OurSurroundings ) extends OurSurroundings
-case class East(val surr: OurSurroundings ) extends OurSurroundings
-case class Not(val surr: OurSurroundings ) extends OurSurroundings
-
-object noSurroundings extends OurSurroundings

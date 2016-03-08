@@ -7,6 +7,13 @@ import picolib.maze.Maze
 import picolib.semantics._
 
 abstract class OurRule {
-  def while(surr: OurSurroundings, action: OurAction): OurRule = 0
-  def if(surr: OurSurroundings, action: OurAction, state: OurState): Our Rule = 0
 }
+
+object OurRule {
+  def loop(surr: OurSurroundings)(action: MoveDirection): OurRule = While(surr, action)
+  def cond(surr: OurSurroundings)(action: MoveDirection)(state: Int): OurRule = If(surr, action, state)
+}
+
+case class While(surr: OurSurroundings, action: MoveDirection) extends OurRule
+
+case class If(surr: OurSurroundings, action: MoveDirection, state: Int) extends OurRule
