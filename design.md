@@ -11,6 +11,7 @@ will become
 ```
 
 ## Who is the target for this design, e.g., are you assuming any knowledge on the part of the language users?
+The target is generally speaking people who haven't programmed before. This is also picobot's target audience, but picobot is kind of a pain to use considering that's the case. I'm not assuming any special knowledge on the part of the users, beyond knowing how picobot itself works.
 
 ## Why did you choose this design, i.e., why did you think it would be a good idea for users to express the maze-searching computation using this syntax?
 
