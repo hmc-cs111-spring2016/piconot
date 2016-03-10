@@ -10,7 +10,7 @@ import piconot.internal.OurSurroundings._
 import piconot.internal.OurAction._
 
 
-class Empty extends JFXApp {
+object Empty extends JFXApp {
   val emptyMaze = Maze("resources" + File.separator + "empty.txt")
 
   var ourProgram = OurProgram 
@@ -33,10 +33,10 @@ class Empty extends JFXApp {
         (move(East))
         (1)))
         
-   object EmptyBot extends Picobot(emptyMaze, ourProgram.rules)
+   object OurEmptyBot extends Picobot(emptyMaze, ourProgram.rules)
     with TextDisplay with GUIDisplay
 
-  stage = EmptyBot.mainStage
+  stage = OurEmptyBot.mainStage
 
-  EmptyBot.run()
+  OurEmptyBot.run()
 }

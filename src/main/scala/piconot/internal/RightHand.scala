@@ -10,7 +10,7 @@ import piconot.internal.OurSurroundings._
 import piconot.internal.OurAction._
 
 
-class RightHand extends JFXApp {
+object RightHand extends JFXApp {
   val rightHandMaze = Maze("resources" + File.separator + "maze.txt")
 
   var ourProgram = OurProgram 
