@@ -40,6 +40,17 @@ It was probably impossible to implement our original syntax in Scala as an inter
 _Describe each change from your ideal syntax to the syntax you implemented, and
 describe_ why _you made the change._
 
+Our syntax did not change although there are some constraints that we were not able to uphold.
+We could not require our users to use newlines or indents for different parts of the program. 
+We also did not do error checking for putting in the same direction as both a wall and empty. We 
+also did not do error chekcing for if user put created multiple tasks/rules with the same name.
+
 **On a scale of 1–10 (where 10 is "a lot"), how much did you have to change your syntax?**
 
+Out change level would be either a 0 or a 1. 
+
 **On a scale of 1–10 (where 10 is "very difficult"), how difficult was it to map your syntax to the provided API?**
+
+We would say that it was about a 5. Our internal representation had a loose connection to the API
+but we had to make alot of conversions that got complicated at time. Especially because we allowed
+tasks, rules and subrules which all had to be condensed down to a single list of rules.

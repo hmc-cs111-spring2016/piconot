@@ -1,0 +1,48 @@
+start ("toTopLeft.goingLeft")
+
+task ("toTopLeft") {
+
+	rule ("toTopLeft.goingLeft") {
+		If isEmpty(Left){
+			Then {move(Left)}
+		},
+
+		If isWall(Left) {
+			Then {next(moveUp)}
+		}
+	},
+
+	rule ("toTopLeft.goingUp") {
+		If isEmpty(Up) {
+			Then {move(Up)}
+		},
+
+		If isWall(Up) and isEmpty(Down){
+			Then {move(Down) and next("zigZag.goingDown")}
+		}
+	}
+}
+
+task ("zigZag") {
+
+	rule ("zigZag.goingDown") {
+		If isEmpty(Down) {
+			Then {move(Down)
+		},
+
+		If (isWall(Down) and (isEmpty(Right)) {
+			Then {move(Right) and next("zigZag.goingUp")}
+		}
+	},
+
+	rule ("zigZag.goingUp") {
+		If isEmpty(Up) {
+			Then move(Up)
+		},
+
+		If isWall(Up) and isEmpty(Right) {
+			Then {move(Right) and next("zigZag.goingDown")}
+		}
+	}
+}
+

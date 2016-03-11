@@ -1,0 +1,51 @@
+start movingUp
+
+movingUp:
+	if isEmpty(Right)
+		move(Right)
+		next(movingRight)
+
+	if isEmpty(Up) and isWall(Right)
+		move(Up)
+		next(movingUp)
+
+	if isWall(Up, Right)
+		next(movingDown)
+
+movingRight:
+	if isEmpty(Down)
+		move(Down)
+		next(movingDown)
+
+	if isEmpty(Right) and isWall(Down)
+		move(Right)
+		next(movingRight)
+
+	if isWall(Right, Down)
+		next(movingLeft)
+
+movingLeft:
+	if isEmpty(Up)
+		move(Up)
+		next(movingUp)
+
+	if isEmpty(Left) and isWall(Up)
+		move(Left)
+		next(movingLeft)
+
+	if isWall(Up, Left)
+		next(movingRight)
+
+movingDown:
+	if isEmpty(Left)
+		move(Left)
+		next(movingLeft)
+
+	if isEmpty(Down) and isWall(Left)
+		move(Down)
+		next(movingDown)
+
+	if isWall(Down, Left)
+		next(movingUp)
+
+

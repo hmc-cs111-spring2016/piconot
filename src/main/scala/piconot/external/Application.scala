@@ -8,14 +8,9 @@ import picolib.maze.Maze
 import picolib.semantics._
 
 object Application extends JFXApp {
-    val source = scala.io.Source.fromFile("syntax.txt")
+    val source = scala.io.Source.fromFile("external-Maze.txt")
     val lines = try source.mkString finally source.close()
-    val emptyMaze = Maze("resources" + File.separator + "empty.txt")
-
-//    PicobotParser(lines) match {
-//        case PicobotParser.Success(t, _) ⇒ println(eval(t))
-//        case e: PicobotParser.NoSuccess  ⇒ println(e)
-//    }
+    val emptyMaze = Maze("resources" + File.separator + "maze.txt")
     
     PicobotParser(lines) match {
         case PicobotParser.Success(t, _) ⇒ {

@@ -37,3 +37,6 @@ task zigZag:
 		if isWall(Up) and isEmpty(Right)
 			move(Right)
 			next(goingDown)
+	
+
+	
