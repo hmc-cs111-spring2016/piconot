@@ -13,29 +13,29 @@ import piconot.internal.OurAction._
 object Empty extends JFXApp {
   val emptyMaze = Maze("resources" + File.separator + "empty.txt")
 
-  var ourProgram = OurProgram 
-  (OurState ( 0 )
+  val ourProgram = List(
+  (OurState (0)
     (loop (notN (*)) (move(North)))
-    (loop (notN (W (*))) (move (West)))
+    (loop (notW (N (*))) (move (West)))
     (cond (N (W (notE (notS (*)))))
         (move (South))
-        (1) ))
+        (1))).rules,
 
   (OurState (1)
     (loop (notS (*)) (move(South)))
     (cond (S (*))
         (move(East))
-        (2)))
+        (2))).rules,
 
   (OurState (2)
     (loop (notN (*)) (move(North)))
-    (cond (N (*))
+    (cond (N (*)) 
         (move(East))
-        (1)))
+        (1))).rules)
         
-   object OurEmptyBot extends Picobot(emptyMaze, ourProgram.rules)
+   object OurEmptyBot extends Picobot(emptyMaze, ourProgram.flatten)
     with TextDisplay with GUIDisplay
-
+    
   stage = OurEmptyBot.mainStage
 
   OurEmptyBot.run()

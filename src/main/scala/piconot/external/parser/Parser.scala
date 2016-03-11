@@ -10,8 +10,9 @@ object PiconotParser extends JavaTokenParsers with PackratParsers {
     def apply(s: String): ParseResult[OurProgram] = parseAll(prgm, s)
     
     lazy val prgm: PackratParser[OurProgram] = 
-      (   emptyProgram ^^ {case e => EmptyProgram()}
-        | state~prgm ^^ {case s~p => CurrProgram(s, p)}
+      (   
+        state~prgm ^^ {case s~p => CurrProgram(s, p)}
+        | emptyProgram ^^ {case e => EmptyProgram()}
       )
       
     lazy val state: PackratParser[OurState] =
@@ -50,8 +51,8 @@ object PiconotParser extends JavaTokenParsers with PackratParsers {
           )
 
     def num: Parser[Int] = wholeNumber ^^ {s ⇒ s.toInt}
-    def emptyProgram: Parser[OurProgram] = " " ^^ {s => EmptyProgram()}
-    def emptyState: Parser[OurState] = " " ^^ {s => EmptyState()}
-    def emptyRule: Parser[OurRules] = " " ^^ {s => EmptyRules()}
-    def emptySurr: Parser[OurSurroundings] = " " ^^ {s => SurrEmpty()}
+    def emptyProgram: Parser[OurProgram] = "" ^^ {s => EmptyProgram()}
+    def emptyState: Parser[OurState] = "" ^^ {s => EmptyState()}
+    def emptyRule: Parser[OurRules] = "" ^^ {s => EmptyRules()}
+    def emptySurr: Parser[OurSurroundings] = "" ^^ {s => SurrEmpty()}
 }
