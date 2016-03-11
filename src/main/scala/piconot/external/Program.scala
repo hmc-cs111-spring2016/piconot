@@ -8,7 +8,8 @@ import scalafx.application.JFXApp
 
 
 object Program extends JFXApp {
-  override def main(args: Array[String]) ={
+  //override def main(args: Array[String]) ={
+    val args = parameters.raw
     val mazeFile = args(0)
     val instructions = scala.io.Source.fromFile(args(1)).mkString
     println(instructions)
@@ -21,5 +22,5 @@ object Program extends JFXApp {
     with TextDisplay with GUIDisplay
   stage = Bot.mainStage
   Bot.run()
-  }
+  //}
 }
