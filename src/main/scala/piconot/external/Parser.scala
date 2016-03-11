@@ -6,8 +6,12 @@ object PicobotParser extends JavaTokenParsers with PackratParsers {
     def apply(s: String): ParseResult[Program] = parseAll(program, s)
     
     def program: Parser[Program] = {
-        (  "start" ~ name ~ repsep(task, "") ^^ {case "start" ~ n ~ ts ⇒ Program(n, ts)}
-         | "start" ~ name ~ repsep(rule, "") ^^ {case "start" ~ n ~ rs ⇒ Program(n, rs)} )
+        "start" ~ name ~ repsep(execution, "") ^^ {case "start" ~ n ~ es ⇒ Program(n, es)}
+    }
+
+    def execution: Parser[Execution] = {
+        ( task ^^ {t ⇒  t}
+         | rule  ^^ { r ⇒ r})
     }
     
     def task: Parser[Task] = {
