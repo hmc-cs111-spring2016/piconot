@@ -1,8 +1,9 @@
 package piconot.internal
 
+
+import piconot.SurroundingsPrime
 import java.io.File
 import scalafx.application.JFXApp
-
 
 import picolib.maze.Maze
 import picolib.semantics._
@@ -14,7 +15,12 @@ import picolib.semantics._
 
 object EmptyRoom extends JFXApp {
   val emptyMaze = Maze("resources" + File.separator + "empty.txt")
+  val s = SurroundingsPrime(Anything, Anything, Blocked, Anything)
+  
 
+  
+  def convertSurroundings(prime: SurroundingsPrime) = Surroundings(prime.north, prime.east, prime.west, prime.south)
+  
   val rules = List(
     
     /////////////////////////////////////////////////////////
@@ -23,16 +29,16 @@ object EmptyRoom extends JFXApp {
     
     // as long as West is unblocked, go West
     Rule( 
-      State("zero"), 
-      Surroundings(Anything, Anything, Open, Anything), 
-      Left, 
+      State("zero"),
+      convertSurroundings(isEmpty(Left)),
+      Left,
       State("zero")
     ),
 
     // can't go West anymore, so try to go North (by transitioning to State 1)
     Rule( 
-      State("zero"), 
-      Surroundings(Anything, Anything, Blocked, Anything), 
+      State("zero"),
+      Surroundings(Anything, Anything, Blocked, Anything),
       StayHere, 
       State("one")
     ),
@@ -72,16 +78,16 @@ object EmptyRoom extends JFXApp {
     // can't go South anymore, move one column to the East and go North
     // (by transitioning to State 3)
     Rule( 
-      State("two"), 
-      Surroundings(Anything, Open, Anything, Blocked), 
-      East, 
+      State("two"),
+      Surroundings(Anything, Open, Anything, Blocked),
+      East,
       State("three")
     ),
 
     // State 3: fill this column from South to North
-    Rule( 
+    Rule(
       State("three"), 
-      Surroundings(Open, Anything, Anything, Anything), 
+      Surroundings(Open, Anything, Anything, Anything),
       North, 
       State("three")
     ),

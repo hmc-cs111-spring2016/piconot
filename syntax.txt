@@ -1,0 +1,41 @@
+start toTopLeft
+
+task toTopLeft:
+	start goingLeft
+
+	goingLeft:
+		if isEmpty(Left)
+			move(Left)
+
+		if isWall(Left)
+			next(moveUp)
+
+	goingUp:
+		if isEmpty(Up)
+			move(Up)
+
+		if isWall(Up) and isEmpty(Down)
+			move(Down)
+			next(zigZag)
+
+task zigZag:
+	start goingDown
+
+	goingDown:
+		if isEmpty(Down)
+			move(Down)
+
+		if isWall(Down) and isEmpty(Right)
+			move(Right)
+			next(goingUp)
+
+	goingUp:
+		if isEmpty(Up)
+			move(Up)
+
+		if isWall(Up) and isEmpty(Right)
+			move(Right)
+			next(goingDown)
+	
+
+	
