@@ -1,0 +1,21 @@
+# A picobot program that can solve a maze, using the right-hand rule
+
+moveUp:      # moving up
+	If can move right, move right and moveRight     # we can go right
+	If cannot move right but can move up, move up   # we can't go right, try going up
+	If cannot move up or right, moveDown            # we can't go right or up, try turning around
+
+moveRight:   # moving right
+	If can move down, move down and moveDown             # we can go right
+	If cannot move down but can move right, move right   # we can't go right, try going forward
+	If cannot move right or down, moveLeft               # we can't go right or forward, try turning around
+
+moveLeft:    # moving left
+	If can move up, move up and moveUP               # we can go right
+	If cannot move up but can move left, move left   # we can't go right, try going forward (west)
+	If cannot move up or left, moveRight             # we can't go right or forward, try turning around
+
+moveDown:    # moving down
+	If can move left, move left and moveLeft           # we can go right
+	If cannot move left but can move down, move down   # we can't go right, try going forward
+	If cannot move left or down, moveUP                # we can't go right or forward, try turning around
