@@ -10,10 +10,10 @@ case class Rule(name: Name, subRules: List[SubRule]) extends Execution
 case class SubRule(condition: Condition, action: Action)
 
 case class Condition(walls: isWall = isWall(List()), empties: isEmpty = isEmpty(List()))
-case class isWall(direction: List[Direction])
-case class isEmpty(direction: List[Direction])
+case class isWall(directions: List[Direction])
+case class isEmpty(directions: List[Direction])
 
-case class Action(move: Move = Move(None), next: Next = null)
+case class Action(move: Move = Move(None), next: Next = Next(Name("")))
 case class Move(direction: Direction)
 case class Next(name: Name)
 
@@ -36,4 +36,4 @@ object None extends Direction{
     override def toString() = "None"
 }
 
-case class Name(name: String)
+case class Name(value: String)

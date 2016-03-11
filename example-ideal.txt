@@ -8,7 +8,7 @@ task toTopLeft:
 			move(Left)
 
 		if isWall(Left)
-			next(moveUp)
+			next(goingUp)
 
 	goingUp:
 		if isEmpty(Up)

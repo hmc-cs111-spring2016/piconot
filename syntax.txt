@@ -8,7 +8,7 @@ task toTopLeft:
 			move(Left)
 
 		if isWall(Left)
-			next(moveUp)
+			next(goingUp)
 
 	goingUp:
 		if isEmpty(Up)
@@ -17,6 +17,7 @@ task toTopLeft:
 		if isWall(Up) and isEmpty(Down)
 			move(Down)
 			next(zigZag)
+
 
 task zigZag:
 	start goingDown
@@ -36,6 +37,3 @@ task zigZag:
 		if isWall(Up) and isEmpty(Right)
 			move(Right)
 			next(goingDown)
-	
-
-	
