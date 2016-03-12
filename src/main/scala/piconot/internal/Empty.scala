@@ -11,7 +11,7 @@ object fillEmptyRoom extends JFXApp {
   // move to the top left
 
   WhenIn ("moveLeftState") {
-    If (canMoveLeft) (moveLeft)            // go all the way to the left
+    If (canMoveLeft) (moveLeft)           // go all the way to the left
     If (cannotMoveLeft) ("moveUpState")   // can't go left anymore, so try to go up
   }
 
@@ -33,5 +33,5 @@ object fillEmptyRoom extends JFXApp {
     If (cannotMoveUp but canMoveRight) (moveRight and "fillColumnDown")   // can't go up anymore, so try to go right
   }
 
-  runOnMaze("resources/empty.txt")
+  runOnMaze("resources/empty.txt")   // run on empty maze
 }

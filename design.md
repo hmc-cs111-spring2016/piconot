@@ -21,3 +21,5 @@ About 8 or so. The only similarity between the two designs is that it follows ro
 
 ## Is there anything you would improve about your design?
 Like I said above, adding some pre-defined logic could simplify the process or creating an advanced program. It would have also been nice to test CS 5 students on how they liked the natural language aspect as it may not work well with how some people think (though it can't really be worse than the original design, so at least it wouldn't make programming harder for some students).
+
+P.S. After working on implementing the internal and external DSLs, I have realized a few flaws in the original design and bugs in the example code. However, rather than change these, I decided to leave them as they are (except for this commment) so that you can see my original thoughts and code. If you want to see what flaws / bugs I found, I have documented them in my evaulation of the DSL implementations in evaluation.md.

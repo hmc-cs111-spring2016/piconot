@@ -5,18 +5,21 @@ import picolib.semantics._
 
 
 package object semantics {
-  var numStates = 0
-  val stateToInt = collection.mutable.Map[String,String]()
+  var numStates = 0                                          // keeps track of how many states have already been used
+  val nameToState = collection.mutable.Map[String,State]()   // converts state names to picolib States
   
+  // adds states to the map and extracts Rules from the AST
   def eval(program: ProgramAST): List[Rule] = {
-    program.states.foreach((s: StateBlockAST) => {stateToInt(s.name) = numStates.toString; numStates += 1})
+    program.states.foreach((s: StateBlockAST) => {nameToState(s.name) = State(numStates.toString); numStates += 1})
     program.states.map((s: StateBlockAST) => handleState(s)).flatten
   }
   
+  // extracts Rules from a single state block 
   def handleState(s: StateBlockAST): List[Rule] = {
-    s.rules.map((r: RuleAST) => Rule(State(stateToInt(s.name)), condToSurr(r.conditions), r.direction, State(stateToInt(r.stateName))))
+    s.rules.map((r: RuleAST) => Rule(nameToState(s.name), condToSurr(r.conditions), r.direction, nameToState(r.stateName)))
   }
   
+  // converts between the AST representation of rule conditions and the picolib representation
   def condToSurr(conditions: List[ConditionAST]): Surroundings = {
     var north: RelativeDescription = Anything
     var south: RelativeDescription = Anything
