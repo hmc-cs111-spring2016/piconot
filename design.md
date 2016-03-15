@@ -21,6 +21,7 @@ but it can also be written as
 ```
 (State: 0, South: *, North: w, West: *, East: x; Go: North, NewState: 0)
 ```
+There's nothing wrong with comments as they are now, so they'll be the same. Multiline comments _might_ be nice, but probably not necessary. If there were multiline comments, something like `###` as an opening and closing tag would do the trick (comments in picobot are based on python comments, and multiline strings start and end with `'''` or `"""` in python, hence `###`).
 
 ## Who is the target for this design, e.g., are you assuming any knowledge on the part of the language users?
 The target is generally speaking people who haven't programmed before. This is also picobot's target audience, but picobot is kind of a pain to use considering that's the case. I'm not assuming any special knowledge on the part of the users, beyond knowing how picobot itself works.
