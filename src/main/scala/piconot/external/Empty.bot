@@ -1,15 +1,20 @@
+
+# State 0: move left
 State 0:
 ,← => ←,0
 ←, => .,1
 
+# State 1: move up
 State 1:
 ,↑ => ↑,1
 ↑,↓ => ↓,2
 
+# State 2: fill this column to the bottom
 State 2:
 ,↓ => ↓,2
 ↓,→ => →,3
 
+# State 3: fill this column to the top
 State 3:
 ,↑ => ↑,3
 ↑,→ => →,2
