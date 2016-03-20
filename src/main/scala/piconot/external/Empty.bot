@@ -1,0 +1,17 @@
+# A Picobot program that can fill an empty room
+
+# States 0 and 1: move to the top left
+
+# State 0: move left
+(State 0, W x; Go W) # go all the way to the left
+(State 0, W +; Go X, NewState 1)
+
+# State 1: move up
+(State 1, N x; Go N)
+(State 1, N +, S x; Go S, newstate 2)
+
+(State 2, south x; Go s)
+(State 2, S +, E x; go East, newState 3)
+
+(state 3, n x, s *, w *, e *; Go north, Newstate 3)
+(State 3, N +, E x; Go E, NewState 2)

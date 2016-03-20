@@ -49,11 +49,14 @@ object PiconotParser extends RegexParsers {
   def defaultMove: MoveDirection = StayHere
 
   def rule: Parser[Rule] = 
-    ("("~state~surrounding~";"~go~","~newState~")") ^^ 
-    {
-      case "("~stateNow~walls~";"~move~","~stateAfter~")" =>
-        Rule(stateNow, walls, move, stateAfter)
-    }
+  (   ("("~state~surrounding~";"~go~","~newState~")") ^^ 
+      { case "("~stateNow~walls~";"~move~","~stateAfter~")" =>
+          Rule(stateNow, walls, move, stateAfter) }
+
+    | ("("~state~surrounding~";"~go~")") ^^
+      { case "("~stateNow~walls~";"~move~")" =>
+          Rule(stateNow, walls, move, stateNow) }
+  )
 
   // Parses the entire surroundings information
   def surrounding: Parser[Surroundings] = 
@@ -265,27 +268,27 @@ object PiconotParser extends RegexParsers {
     )
     
   def n: Parser[RelativeDescription] = 
-    (   ("n" | "N")~("orth" | "")~":"~>wall
-      | failure("expected *, x, or + after tag N(orth):") )
+    (   ("n" | "N")~("orth" | "")~>wall
+      | failure("expected *, x, or + after tag N(orth)") )
 
   def e: Parser[RelativeDescription] = 
-    (   ("e" | "E")~("ast" | "")~":"~>wall
-      | failure("expected *, x, or + after tag E(ast):") )
+    (   ("e" | "E")~("ast" | "")~>wall
+      | failure("expected *, x, or + after tag E(ast)") )
 
   def w: Parser[RelativeDescription] = 
-    (   ("w" | "W")~("est" | "")~":"~>wall
-      | failure("expected *, x, or + after tag W(est):") )
+    (   ("w" | "W")~("est" | "")~>wall
+      | failure("expected *, x, or + after tag W(est)") )
 
   def s: Parser[RelativeDescription] = 
-    (   ("s" | "S")~("outh" | "")~":"~>wall
-      | failure("expected *, x, or + after tag S(outh):") )
+    (   ("s" | "S")~("outh" | "")~>wall
+      | failure("expected *, x, or + after tag S(outh)") )
 
   def wall: Parser[RelativeDescription] = 
     (   ("*" ^^^ Anything)
       | ("x" ^^^ Open)
       | ("+" ^^^ Blocked) )
 
-  def go: Parser[MoveDirection] = ("g" | "G")~"o:"~>direction
+  def go: Parser[MoveDirection] = ("g" | "G")~"o"~>direction
 
   def direction: Parser[MoveDirection] =
     (   (("x"|"X") ^^^ StayHere)
@@ -295,7 +298,7 @@ object PiconotParser extends RegexParsers {
       | (("s" | "S")~("outh" | "") ^^^ South) )
 
   def state: Parser[State] =
-    (("s"|"S")~"tate:"~>"""\d\d?""".r) ^^ State
+    (("s"|"S")~"tate"~>"""\d\d?""".r) ^^ State
 
   def newState: Parser[State] =
     ("n"|"N")~"ew"~>state
