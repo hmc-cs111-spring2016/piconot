@@ -1,6 +1,12 @@
 package piconot.external.semantics
 
 /**
+ * NOTE: I copied this from the sample solution initially to test my parser,
+ * but at this point I don't really have time to write my own version of this.
+ * I'm leaving this here to make sure I don't break anything.
+ */
+
+/**
  * This file adds semantic checks to Piconot, including:
  *    Checking for undefined states
  *    Checking for unreachable states

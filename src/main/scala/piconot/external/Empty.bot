@@ -1,10 +1,13 @@
 # A Picobot program that can fill an empty room
+#
+# This program shows some of the more and less
+# verbose ways to say the same thing.
 
 # States 0 and 1: move to the top left
 
 # State 0: move left
 (State 0, W x; Go W) # go all the way to the left
-(State 0, W +; Go X, NewState 1)
+(State 0, W +; NewState 1)
 
 # State 1: move up
 (State 1, N x; Go N)
@@ -15,3 +18,17 @@
 
 (state 3, n x, s *, w *, e *; Go north, Newstate 3)
 (State 3, N +, E x; Go E, NewState 2)
+
+# The following is a more stylistically consistent version of the program above
+#
+# (state 0, w x; go w)
+# (state 0, w +; newstate 1)
+#
+# (state 1, n x; go n)
+# (state 1, n +, s x; go s, newstate 2)
+# 
+# (state 2, s x; go s)
+# (state 2, e x, s +; go e, newstate 3)
+# 
+# (state 3, n x; go n)
+# (state 3, n +, e x; go e, newstate 2)

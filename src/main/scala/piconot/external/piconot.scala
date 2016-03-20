@@ -7,6 +7,14 @@ import piconot.external.parser.PiconotParser
 import piconot.external.semantics._
 import scalafx.application.JFXApp
 
+/**
+ * NOTE: I copied this from the sample solution. Since there's
+ * not really anything here that's particularly related to the
+ * actual implementation of the language, I'm leaving this as the
+ * way to run the piconot programs rather than writing basically
+ * this same program from scratch.
+ */
+
 
 object Piconot extends JFXApp {
 
