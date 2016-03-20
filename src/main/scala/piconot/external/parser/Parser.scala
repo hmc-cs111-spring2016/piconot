@@ -42,162 +42,242 @@ object PiconotParser extends RegexParsers {
 
   def program: Parser[List[Rule]] = rule*
 
+  // If no information about surroundings is given, default to this.
   def defaultWalls: Surroundings = 
     Surroundings(Anything, Anything, Anything, Anything)
 
   def defaultMove: MoveDirection = StayHere
 
   def rule: Parser[Rule] = 
-    "("~state~("" | ","~surrounding)~("" | ";"~go~(""|","~newState))~")" ^^ 
+    ("("~state~surrounding~";"~go~","~newState~")") ^^ 
     {
-      case "("~stateNow~""~""~")" => 
-        Rule(stateNow, defaultWalls, defaultMove, stateNow)
-
-      case "("~stateNow~","~walls~""~")" =>
-        Rule(stateNow, walls, defaultMove, stateNow)
-
-      case "("~stateNow~""~";"~move~""~")" =>
-        Rule(stateNow, defaultWalls, move, stateNow)
-
-      case "("~stateNow~""~";"~move~","~stateAfter~")" =>
-        Rule(stateNow, defaultWalls, move, stateAfter)
-
-      case "("~stateNow~","~walls~";"~move~","~stateAfter~")" =>
+      case "("~stateNow~walls~";"~move~","~stateAfter~")" =>
         Rule(stateNow, walls, move, stateAfter)
     }
 
-
+  // Parses the entire surroundings information
   def surrounding: Parser[Surroundings] = 
-  (onewall | n~","~noN | e~","~noE | w~","~noW | s~","~noS) ^^ {
-    case n => Surroundings(n, Anything, Anything, Anything)
-    case e => Surroundings(Anything, e, Anything, Anything)
-    case w => Surroundings(Anything, Anything, w, Anything)
-    case s => Surroundings(Anything, Anything, Anything, s)
-    
-    case n~","~noN => noN(n)
-    case e~","~noE => noE(e)
-    case w~","~noW => noW(w)
-    case s~","~noS => noS(s)
-  }
+    (   ","~>nfirst 
+      | ","~>efirst 
+      | ","~>wfirst 
+      | ","~>sfirst
+      | ","~>onewall
+      | ("" ^^^ defaultWalls)
+    )
+
+  // This matches rules where wall info is given for north first, followed
+  // by more wall information
+  def nfirst: Parser[Surroundings] = n~","~noN ^^
+  { case first~","~rest => rest(first) }
+
+  // Like nfirst, but east is given first
+  def efirst: Parser[Surroundings] = e~","~noE ^^
+  { case first~","~rest => rest(first) }
+
+  // like nfirst, but west is given first
+  def wfirst: Parser[Surroundings] = w~","~noW ^^
+  { case first~","~rest => rest(first) }
+
+  // like nfirst, but south is given first
+  def sfirst: Parser[Surroundings] = s~","~noS ^^
+  { case first~","~rest => rest(first) }
 
   def noN: Parser[RelativeDescription => Surroundings] = 
-    (e | w | s | e~","~noNE | w~","~noNW | s~","~noNS) ^^
-  {
-    case e => Surroundings(_:RelativeDescription, e, Anything, Anything)
-    case w => Surroundings(_:RelativeDescription, Anything, w, Anything)
-    case s => Surroundings(_:RelativeDescription, Anything, Anything, s)
+  (   nefirst 
+    | nwfirst 
+    | nsfirst 
+    | (e ^^ {case e => Surroundings(_:RelativeDescription, e, Anything, Anything)})
+    | (w ^^ {case w => Surroundings(_:RelativeDescription, Anything, w, Anything)})
+    | (s ^^ {case s => Surroundings(_:RelativeDescription, Anything, Anything, s)})
+  )
 
-    case e~","~noNE => noNE(east=e)
-    case w~","~noNW => noNW(west=w)
-    case s~","~noNS => noNS(south=s)
-  }
+  def nefirst: Parser[RelativeDescription => Surroundings] = e~","~noNE ^^
+  { case first~","~rest => rest(_:RelativeDescription, first) }
+
+  def nwfirst: Parser[RelativeDescription => Surroundings] = w~","~noNW ^^
+  { case first~","~rest => rest(_:RelativeDescription, first) }
+
+  def nsfirst: Parser[RelativeDescription => Surroundings] = s~","~noNS ^^
+  { case first~","~rest => rest(_:RelativeDescription, first) }
 
   def noE: Parser[RelativeDescription => Surroundings] = 
-    (n | w | s | n~","~noNE | w~","~noEW | s~","~noES) ^^
-  {
-    case n => Surroundings(n, _:RelativeDescription, Anything, Anything)
-    case w => Surroundings(Anything, _:RelativeDescription, w, Anything)
-    case s => Surroundings(Anything, _:RelativeDescription, Anything, s)
+  (   enfirst 
+    | ewfirst 
+    | esfirst
+    | (n ^^ {case n => Surroundings(n, _:RelativeDescription, Anything, Anything)})
+    | (w ^^ {case w => Surroundings(Anything, _:RelativeDescription, w, Anything)})
+    | (s ^^ {case s => Surroundings(Anything, _:RelativeDescription, Anything, s)})
+  )
 
-    case n~","~noNE => noNE(north=n)
-    case w~","~noEW => noEW(west=w)
-    case s~","~noES => noES(south=s)
-  }
+  def enfirst: Parser[RelativeDescription => Surroundings] = n~","~noNE ^^
+  { case first~","~rest => rest(first, _:RelativeDescription) }
+
+  def ewfirst: Parser[RelativeDescription => Surroundings] = w~","~noEW ^^
+  { case first~","~rest => rest(_:RelativeDescription, first) }
+
+  def esfirst: Parser[RelativeDescription => Surroundings] = s~","~noES ^^
+  { case first~","~rest => rest(_:RelativeDescription, first) }
 
   def noW: Parser[RelativeDescription => Surroundings] = 
-    (n | e | s | n~","~noNW | e~","~noEW | s~","~noWS) ^^
-  {
-    case n => Surroundings(n, Anything, _:RelativeDescription, Anything)
-    case e => Surroundings(Anything, e, _:RelativeDescription, Anything)
-    case s => Surroundings(Anything, Anything, _:RelativeDescription, s)
+  (   wnfirst 
+    | wefirst 
+    | wsfirst 
+    | (n ^^ {case n => Surroundings(n, Anything, _:RelativeDescription, Anything)})
+    | (e ^^ {case e => Surroundings(Anything, e, _:RelativeDescription, Anything)})
+    | (s ^^ {case s => Surroundings(Anything, Anything, _:RelativeDescription, s)})
+  )
 
-    case n~","~noNW => noNW(north=n)
-    case e~","~noEW => noEW(east=e)
-    case s~","~noWS => noWS(south=s)
-  }
+  def wnfirst: Parser[RelativeDescription => Surroundings] = n~","~noNW ^^
+  { case first~","~rest => rest(first, _:RelativeDescription) }
+
+  def wefirst: Parser[RelativeDescription => Surroundings] = e~","~noEW ^^
+  { case first~","~rest => rest(first, _:RelativeDescription) }
+
+  def wsfirst: Parser[RelativeDescription => Surroundings] = s~","~noWS ^^
+  { case first~","~rest => rest(_:RelativeDescription, first) }
 
   def noS: Parser[RelativeDescription => Surroundings] = 
-    (n | e | w | n~","~noNS | e~","~noES | w~","~noWS) ^^
-  {
-    case n => Surroundings(n, Anything, Anything, _:RelativeDescription)
-    case e => Surroundings(Anything, e, Anything, _:RelativeDescription)
-    case w => Surroundings(Anything, Anything, w,  _:RelativeDescription)
+  (   snfirst 
+    | sefirst 
+    | swfirst 
+    | (n ^^ {case n => Surroundings(n, Anything, Anything, _:RelativeDescription)})
+    | (e ^^ {case e => Surroundings(Anything, e, Anything, _:RelativeDescription)})
+    | (w ^^ {case w => Surroundings(Anything, Anything, w, _:RelativeDescription)})
+  )
 
-    case n~","~noNS => noNS(north=n)
-    case e~","~noES => noES(east=e)
-    case w~","~noWS => noWS(west=w)
-  }
+  def snfirst: Parser[RelativeDescription => Surroundings] = n~","~noNS ^^
+  { case first~","~rest => rest(first, _:RelativeDescription) }
+
+  def sefirst: Parser[RelativeDescription => Surroundings] = e~","~noES ^^
+  { case first~","~rest => rest(first, _:RelativeDescription) }
+
+  def swfirst: Parser[RelativeDescription => Surroundings] = w~","~noWS ^^
+  { case first~","~rest => rest(first, _:RelativeDescription) }
 
   def noNE: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
-    (w | s | w~","~s | s~","~w) ^^
-  {
-    case w => Surroundings(_:RelativeDescription, _:RelativeDescription, w, Anything)
-    case s => Surroundings(_:RelativeDescription, _:RelativeDescription, Anything, s)
-    case w~","~s | s~","~w =>
-      Surroundings(_:RelativeDescription, _:RelativeDescription, w, s)
-  }
+  (   wslast
+    | swlast 
+    | (w ^^ 
+      {case w => Surroundings(_:RelativeDescription, _:RelativeDescription, w, Anything)})
+    | (s ^^
+      {case s => Surroundings(_:RelativeDescription, _:RelativeDescription, Anything, s)})
+  )
+
+  def wslast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  w~","~s ^^ 
+  { case w~","~s => Surroundings(_:RelativeDescription, _:RelativeDescription, w, s) }
+
+  def swlast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  s~","~w ^^ 
+  { case s~","~w => Surroundings(_:RelativeDescription, _:RelativeDescription, w, s) }
 
   def noNW: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
-    (e | s | e~","~s | s~","~e) ^^
-  {
-    case e => Surroundings(_:RelativeDescription, e, _:RelativeDescription, Anything)
-    case s => Surroundings(_:RelativeDescription, _:RelativeDescription, Anything, s)
-    case e~","~s | s~","~e =>
-      Surroundings(_:RelativeDescription, e, _:RelativeDescription, s)
-  }
+  (   eslast
+    | selast 
+    | (e ^^ 
+      {case e => Surroundings(_:RelativeDescription, e, _:RelativeDescription, Anything)})
+    | (s ^^
+      {case s => Surroundings(_:RelativeDescription, Anything, _:RelativeDescription, s)})
+  )
+
+  def eslast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  e~","~s ^^ 
+  { case e~","~s => Surroundings(_:RelativeDescription, e, _:RelativeDescription, s) }
+
+  def selast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  s~","~e ^^ 
+  { case s~","~e => Surroundings(_:RelativeDescription, e, _:RelativeDescription, s) }
 
   def noNS: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
-    (e | w | e~","~w | w~","~e) ^^
-  {
-    case e => Surroundings(_:RelativeDescription, e, Anything, _:RelativeDescription)
-    case w => Surroundings(_:RelativeDescription, Anything, w,_:RelativeDescription)
-    case e~","~w | w~","~e =>
-      Surroundings(_:RelativeDescription, e, w, _:RelativeDescription)
-  }
+  (   ewlast
+    | welast
+    | (e ^^ 
+      {case e => Surroundings(_:RelativeDescription, e, Anything, _:RelativeDescription)})
+    | (w ^^
+      {case w => Surroundings(_:RelativeDescription, Anything, w, _:RelativeDescription)})
+    )
+
+  def ewlast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  e~","~w ^^ 
+  { case e~","~w => Surroundings(_:RelativeDescription, e, w, _:RelativeDescription) }
+
+  def welast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  w~","~e ^^ 
+  { case w~","~e => Surroundings(_:RelativeDescription, e, w, _:RelativeDescription) }
 
   def noEW: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
-    (n | s | n~","~s | s~","~n) ^^
-  {
-    case n => Surroundings(n, _:RelativeDescription, _:RelativeDescription, Anything)
-    case s => Surroundings(Anything, _:RelativeDescription, _:RelativeDescription, s)
-    case n~","~s | s~","~n =>
-      Surroundings(n, _:RelativeDescription, _:RelativeDescription, s)
-  }
+  (   nslast
+    | snlast
+    | (n ^^ 
+      {case n => Surroundings(n, _:RelativeDescription, _:RelativeDescription, Anything)})
+    | (s ^^
+      {case s => Surroundings(Anything, _:RelativeDescription, _:RelativeDescription, s)})
+  )
+
+  def nslast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  n~","~s ^^ 
+  { case n~","~s => Surroundings(n, _:RelativeDescription, _:RelativeDescription, s) }
+
+  def snlast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  s~","~n ^^ 
+  { case s~","~n => Surroundings(n, _:RelativeDescription, _:RelativeDescription, s) }
 
   def noES: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
-    (n | w | n~","~w | w~","~n) ^^
-  {
-    case n => Surroundings(n, _:RelativeDescription, Anything, _:RelativeDescription)
-    case w => Surroundings(Anything, _:RelativeDescription, w, _:RelativeDescription)
-    case n~","~w | w~","~n =>
-      Surroundings(n, _:RelativeDescription, w, _:RelativeDescription)
-  }
+  (   nwlast
+    | wnlast
+    | (n ^^ 
+      {case n => Surroundings(n, _:RelativeDescription, Anything, _:RelativeDescription)})
+    | (w ^^
+      {case w => Surroundings(Anything, _:RelativeDescription, w, _:RelativeDescription)})
+  )
+
+  def nwlast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  n~","~w ^^ 
+  { case n~","~w => Surroundings(n, _:RelativeDescription, w, _:RelativeDescription) }
+
+  def wnlast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  w~","~n ^^ 
+  { case w~","~n => Surroundings(n, _:RelativeDescription, w, _:RelativeDescription) }
 
   def noWS: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
-    (n | e | n~","~e | e~","~n) ^^
-  {
-    case n => Surroundings(n, Anything, _:RelativeDescription, _:RelativeDescription)
-    case e => Surroundings(Anything, e, _:RelativeDescription, _:RelativeDescription)
-    case n~","~e | e~","~n =>
-      Surroundings(n, e, _:RelativeDescription, _:RelativeDescription)
-  }
+  (   nelast
+    | enlast
+    | (n ^^ 
+      {case n => Surroundings(n, Anything, _:RelativeDescription, _:RelativeDescription)})
+    | (e ^^
+      {case e => Surroundings(Anything, e, _:RelativeDescription, _:RelativeDescription)})
+  )
 
-  def onewall: Parser[RelativeDescription] = (n | e | w | s)
+  def nelast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  n~","~e ^^ 
+  { case n~","~e => Surroundings(n, e, _:RelativeDescription, _:RelativeDescription) }
+
+  def enlast: Parser[(RelativeDescription, RelativeDescription) => Surroundings] =
+  e~","~n ^^ 
+  { case e~","~n => Surroundings(n, e, _:RelativeDescription, _:RelativeDescription) }
+
+
+  def onewall: Parser[Surroundings] = 
+    (   (n ^^ {case north => Surroundings(north, Anything, Anything, Anything)})
+      | (e ^^ {case east => Surroundings(Anything, east, Anything, Anything)})
+      | (w ^^ {case west => Surroundings(Anything, Anything, west, Anything)})
+      | (s ^^ {case south => Surroundings(Anything, Anything, Anything, south)}) 
+    )
     
   def n: Parser[RelativeDescription] = 
-    (   ("n" | "N")~("" | "orth")~":"~>wall
+    (   ("n" | "N")~("orth" | "")~":"~>wall
       | failure("expected *, x, or + after tag N(orth):") )
 
   def e: Parser[RelativeDescription] = 
-    (   ("e" | "E")~("" | "ast")~":"~>wall
+    (   ("e" | "E")~("ast" | "")~":"~>wall
       | failure("expected *, x, or + after tag E(ast):") )
 
   def w: Parser[RelativeDescription] = 
-    (   ("w" | "W")~("" | "est")~":"~>wall
+    (   ("w" | "W")~("est" | "")~":"~>wall
       | failure("expected *, x, or + after tag W(est):") )
 
   def s: Parser[RelativeDescription] = 
-    (   ("s" | "S")~("" | "outh")~":"~>wall
+    (   ("s" | "S")~("outh" | "")~":"~>wall
       | failure("expected *, x, or + after tag S(outh):") )
 
   def wall: Parser[RelativeDescription] = 
@@ -209,10 +289,10 @@ object PiconotParser extends RegexParsers {
 
   def direction: Parser[MoveDirection] =
     (   (("x"|"X") ^^^ StayHere)
-      | (("n" | "N")~("" | "orth") ^^^ North)
-      | (("e" | "E")~("" | "ast") ^^^ East)
-      | (("w" | "W")~("" | "est") ^^^ West)
-      | (("s" | "S")~("" | "outh") ^^^ South) )
+      | (("n" | "N")~("orth" | "") ^^^ North)
+      | (("e" | "E")~("ast" | "") ^^^ East)
+      | (("w" | "W")~("est" | "") ^^^ West)
+      | (("s" | "S")~("outh" | "") ^^^ South) )
 
   def state: Parser[State] =
     (("s"|"S")~"tate:"~>"""\d\d?""".r) ^^ State
