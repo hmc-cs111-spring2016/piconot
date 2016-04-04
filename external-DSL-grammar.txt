@@ -1,0 +1,48 @@
+
+
+Program::=	"start" Name
+			↳ [Execution]
+
+		 |  "start" Name
+		 	↳ [Execution]
+
+Execution::=  Task
+			| Rule
+
+Task::= 	"task" Name ":"
+			↳ "start" Name
+			↳ [Rule]
+
+Rule::=		Name ":"
+				[SubRule]
+
+SubRule:= 	↳ Condition
+				↳ Action
+
+Condition::= "if" WallCheck
+		   | "if" EmptyCheck
+		   | "if" WallCheck "and" EmptyCheck
+		   | "if" EmptyCheck "and" WallCheck
+
+
+//	When doing lists of directions we want commas separating them which we can
+//	do with 
+
+WallCheck::=	"isWall("  [Direction] ")"
+EmptyCheck::=	"isEmpty(" [Direction] ")"
+
+
+Action::=	Move
+		|	Next
+		|	Move
+			↳Next
+
+Move::= 	"move(" Direction ")"
+
+Next::= 	"next(" Name ")"
+
+Direction::= "Up" | "Down" | "Left" | "Right"
+
+Name::=	String
+
+
