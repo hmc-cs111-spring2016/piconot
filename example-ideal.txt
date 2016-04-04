@@ -1,0 +1,31 @@
+# Here's the empty room program in my syntax!
+# I've written it as concisely as possible here
+
+(State: 0, W: x; Go: W)
+(State: 0, W: w; NewState: 1)
+
+(State: 1, N: x; Go: N)
+(State: 1, N: w, S: x; Go: S, NewState: 2)
+
+(State: 2, S: x; Go: S)
+(State: 2, S: w, E: x; Go: E, NewState: 3)
+
+(State: 3, N: x; Go: N)
+(State: 3, N: w, E: x; Go: E, NewState: 2)
+
+
+# Here it is again, as explicitly as possible. I've maintained a consistent
+# order when writing the directions for wall-checking, but they don't have
+# to be written in the NEWS order.
+
+(State: 0, North: *, East: *, West: x, South: *; Go: West, NewState: 0)
+(State: 0, North: *, East: *, West: w, South: *; Go: X, NewState: 1)
+
+(State: 1, North: x, East: *, West: *, South: *; Go: North, NewState: 1)
+(State: 1, North: w, East: *, West: *, South: x; Go: South, NewState: 2)
+
+(State: 2, North: *, East: *, West: *, South: x; Go: South, NewState: 2)
+(State: 2, North: *, East: x, West: *, South: w; Go: East, NewState: 3)
+
+(State: 3, North: x, East: *, West: *, South: *; Go: North, NewState: 3)
+(State: 3, North: w, East: x, West: *, South: *; Go: East, NewState: 2)
