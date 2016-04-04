@@ -192,7 +192,7 @@ Include at least two sample programs.
 
 For the internal version, include the files:
 
-  1. `src/main/scala/piconot/external/Empty.bot`: a program in your internal
+  1. `src/main/scala/piconot/external/Empty.scala`: a program in your internal
   DSL that
   can solve the empty room. A file that describes an empty room is in 
   `resources/empty.txt`.
