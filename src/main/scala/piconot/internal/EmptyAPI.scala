@@ -11,9 +11,9 @@ import picolib.semantics._
  *  the picolib library that you might need to implement your language
  */
 
-object EmptyRoom extends JFXApp {
+object EmptyRoom extends JFXApp {  
   val emptyMaze = Maze("resources" + File.separator + "empty.txt")
-
+  
   val rules = List(
     
     /////////////////////////////////////////////////////////
