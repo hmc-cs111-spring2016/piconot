@@ -11,6 +11,8 @@ import picolib.semantics._
  *  the picolib library that you might need to implement your language
  */
 
+
+
 object EmptyRoom extends JFXApp {
   val emptyMaze = Maze("resources" + File.separator + "empty.txt")
 
@@ -19,12 +21,12 @@ object EmptyRoom extends JFXApp {
     /////////////////////////////////////////////////////////
     // State 0: go West
     /////////////////////////////////////////////////////////
-
+            
     // as long as West is unblocked, go West
     Rule( 
       State("0"), 
-      Surroundings(Anything, Anything, Open, Anything), 
-      West, 
+      Surroundings(Anything, Anything, Open, Anything),
+      picolib.semantics.West, 
       State("0")
     ),  
 
@@ -44,7 +46,7 @@ object EmptyRoom extends JFXApp {
     Rule( 
       State("1"), 
       Surroundings(Open, Anything, Anything, Anything), 
-      North, 
+      picolib.semantics.North, 
       State("1")
     ),
 
@@ -52,7 +54,7 @@ object EmptyRoom extends JFXApp {
     Rule( 
       State("1"), 
       Surroundings(Blocked, Anything, Anything, Open), 
-      South, 
+      picolib.semantics.South, 
       State("2")
     ), 
 
@@ -64,7 +66,7 @@ object EmptyRoom extends JFXApp {
     Rule( 
       State("2"), 
       Surroundings(Anything, Anything, Anything, Open), 
-      South, 
+      picolib.semantics.South, 
       State("2")
     ), 
 
@@ -73,7 +75,7 @@ object EmptyRoom extends JFXApp {
     Rule( 
       State("2"), 
       Surroundings(Anything, Open, Anything, Blocked), 
-      East, 
+      picolib.semantics.East, 
       State("3")
     ),
 
@@ -81,7 +83,7 @@ object EmptyRoom extends JFXApp {
     Rule( 
       State("3"), 
       Surroundings(Open, Anything, Anything, Anything), 
-      North, 
+      picolib.semantics.North, 
       State("3")
     ),
 
@@ -90,7 +92,7 @@ object EmptyRoom extends JFXApp {
     Rule( 
       State("3"), 
       Surroundings(Blocked, Open, Anything, Anything), 
-      East, 
+      picolib.semantics.East, 
       State("2")
     )
   )
