@@ -1,4 +1,4 @@
-name := "piconot" // you can change this!
+name := "piconot-ben"
 
 version := "1.0"
 
